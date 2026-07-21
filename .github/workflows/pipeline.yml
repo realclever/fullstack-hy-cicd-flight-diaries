@@ -1,0 +1,50 @@
+name: Flight Diaries pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Lint backend
+        working-directory: backend
+        run: npm run lint
+
+      - name: Type-check backend
+        working-directory: backend
+        run: npm run tsc
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Lint frontend
+        working-directory: frontend
+        run: npm run lint
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
