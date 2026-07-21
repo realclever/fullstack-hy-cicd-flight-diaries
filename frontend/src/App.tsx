@@ -1,28 +1,28 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import diaryService from "./services";
-import { Visibility, Weather } from "./types";
-import type { DiaryEntry, NewDiaryEntry } from "./types";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import diaryService from './services';
+import { Visibility, Weather } from './types';
+import type { DiaryEntry, NewDiaryEntry } from './types';
 
 const weatherOptions = Object.values(Weather);
 const visibilityOptions = Object.values(Visibility);
 
 const formatDate = (date: string) =>
-  new Intl.DateTimeFormat("fi-FI", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    timeZone: "UTC",
+  new Intl.DateTimeFormat('fi-FI', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'UTC',
   }).format(new Date(`${date}T00:00:00Z`));
 
 const App = () => {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const [date, setDate] = useState("");
-  const [weather, setWeather] = useState<Weather | "">("");
-  const [visibility, setVisibility] = useState<Visibility | "">("");
-  const [comment, setComment] = useState("");
+  const [date, setDate] = useState('');
+  const [weather, setWeather] = useState<Weather | ''>('');
+  const [visibility, setVisibility] = useState<Visibility | ''>('');
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
     diaryService.getAll().then((data) => {
@@ -34,7 +34,7 @@ const App = () => {
     event.preventDefault();
 
     if (!date || !weather || !visibility) {
-      setError("Date, weather and visibility are required");
+      setError('Date, weather and visibility are required');
       return;
     }
 
@@ -50,10 +50,10 @@ const App = () => {
       .then((returnedDiary) => {
         setDiaries(diaries.concat(returnedDiary));
 
-        setDate("");
-        setWeather("");
-        setVisibility("");
-        setComment("");
+        setDate('');
+        setWeather('');
+        setVisibility('');
+        setComment('');
         setError(null);
       })
       .catch((error: unknown) => {
@@ -61,17 +61,17 @@ const App = () => {
           const responseData: unknown = error.response?.data;
 
           if (
-            typeof responseData === "object" &&
+            typeof responseData === 'object' &&
             responseData !== null &&
-            "error" in responseData &&
-            typeof responseData.error === "string"
+            'error' in responseData &&
+            typeof responseData.error === 'string'
           ) {
             setError(responseData.error);
             return;
           }
         }
 
-        setError("Failed to create diary entry");
+        setError('Failed to create diary entry');
       });
   };
 
@@ -112,7 +112,7 @@ const App = () => {
             <div className="option-group">
               {weatherOptions.map((option) => (
                 <label
-                  className={`option-pill ${weather === option ? "selected" : ""}`}
+                  className={`option-pill ${weather === option ? 'selected' : ''}`}
                   key={option}
                 >
                   <input
@@ -135,7 +135,7 @@ const App = () => {
               {visibilityOptions.map((option) => (
                 <label
                   className={`option-pill ${
-                    visibility === option ? "selected" : ""
+                    visibility === option ? 'selected' : ''
                   }`}
                   key={option}
                 >
@@ -177,7 +177,7 @@ const App = () => {
           </div>
 
           <span className="entry-count">
-            {diaries.length} {diaries.length === 1 ? "entry" : "entries"}
+            {diaries.length} {diaries.length === 1 ? 'entry' : 'entries'}
           </span>
         </div>
 
